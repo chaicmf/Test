@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://code.alibabatech.com/schema/dubbo
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <context:property-placeholder location="classpath:redis.properties" />
+    <!-- 采用注解的方式配置bean -->
+    <context:annotation-config />
+
+    <!-- 配置要扫描的包 -->
+    <context:component-scan base-package="com.cmf" />
+    <!--p 需要添加变量setter方法-->
+    <!--<bean id="messageService" class="com.cmf.helloWord.service.Impl.MessageServiceImpl" p:username="zhagn" scope="threadScope">-->
+        <!--<constructor-arg index="0" name="username" value="zhang"/>-->
+        <!--<constructor-arg index="1" name="age" value="20"/>-->
+    <!--</bean>-->
+    <!--&lt;!&ndash;depends-on  强制依赖的bean 在引用之前就初始化 子那个要依赖多个可以用逗号、空格或分号 分割 &ndash;&gt;-->
+    <!--<bean id="messagePrinter" class="com.cmf.helloWord.MessagePrinter"  depends-on="messageService">-->
+        <!--<constructor-arg ref="messageService"/>-->
+    <!--</bean>-->
+    <!--<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">-->
+        <!--<property name="scopes">-->
+            <!--<map>-->
+                <!--<entry key="threadScope">-->
+                    <!--<bean class="com.cmf.helloWord.ThreadScope"></bean>-->
+                <!--</entry>-->
+            <!--</map>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!--配置redis连接池-->
+        <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+            <property name="maxTotal"  value="${redis.maxActive}"/>
+            <property name="maxIdle" value="${redis.maxIdle}"/>
+            <property name="testOnBorrow" value="${redis.textOnBorrow}"/>
+        </bean>
+
+    <!--spring-redis连接工厂-->
+    <bean id="jedisConnectFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="password" value="${redis.password}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="timeout" value="${redis.timeout}"/>
+        <property name="poolConfig" ref="poolConfig"/>
+        <property name="usePool" value="true" />
+        <property name="database" value="0" />
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectFactory"/>
+        <property name="keySerializer" >
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"></bean>
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"></bean>
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"></bean>
+        </property>
+    </bean>
+</beans>

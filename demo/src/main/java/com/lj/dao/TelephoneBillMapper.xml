@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lj.dao.TelephoneBillMapper" >
+  <resultMap id="BaseResultMap" type="com.lj.pojo.TelephoneBill" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="Telephone_bill" property="telephoneBill" jdbcType="VARCHAR" />
+    <result column="Res_telephone_bill" property="resTelephoneBill" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="month" property="month" jdbcType="VARCHAR" />
+    <result column="userId" property="userid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, Telephone_bill, Res_telephone_bill, telephone, year, month, userId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from telephone_bill
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from telephone_bill
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lj.pojo.TelephoneBill" >
+    insert into telephone_bill (id, Telephone_bill, Res_telephone_bill, 
+      telephone, year, month, 
+      userId)
+    values (#{id,jdbcType=INTEGER}, #{telephoneBill,jdbcType=VARCHAR}, #{resTelephoneBill,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lj.pojo.TelephoneBill" >
+    insert into telephone_bill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="telephoneBill != null" >
+        Telephone_bill,
+      </if>
+      <if test="resTelephoneBill != null" >
+        Res_telephone_bill,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="month != null" >
+        month,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="telephoneBill != null" >
+        #{telephoneBill,jdbcType=VARCHAR},
+      </if>
+      <if test="resTelephoneBill != null" >
+        #{resTelephoneBill,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lj.pojo.TelephoneBill" >
+    update telephone_bill
+    <set >
+      <if test="telephoneBill != null" >
+        Telephone_bill = #{telephoneBill,jdbcType=VARCHAR},
+      </if>
+      <if test="resTelephoneBill != null" >
+        Res_telephone_bill = #{resTelephoneBill,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null" >
+        month = #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lj.pojo.TelephoneBill" >
+    update telephone_bill
+    set Telephone_bill = #{telephoneBill,jdbcType=VARCHAR},
+      Res_telephone_bill = #{resTelephoneBill,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR},
+      month = #{month,jdbcType=VARCHAR},
+      userId = #{userid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
